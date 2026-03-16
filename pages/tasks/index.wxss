@@ -1,0 +1,422 @@
+.container {
+  padding: 30rpx;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* 添加按钮 */
+.add-btn-wrapper {
+  margin-bottom: 30rpx;
+}
+
+.add-btn {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #333;
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 44rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  box-shadow: 0 4rpx 20rpx rgba(255, 215, 0, 0.3);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-btn::after {
+  border: none;
+}
+
+/* 任务列表 */
+.task-section {
+  background-color: #fff;
+  border-radius: 24rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.task-item {
+  border-bottom: 1rpx solid #f0f0f0;
+  padding: 30rpx 0;
+}
+
+.task-item:last-child {
+  border-bottom: none;
+}
+
+.task-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+/* 任务头部 */
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.task-title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.task-name {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.task-desc {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 星星容器 - 修复居中 */
+.task-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFF9E6;
+  padding: 8rpx 20rpx;
+  border-radius: 40rpx;
+  min-width: 80rpx;
+  height: 52rpx;
+  margin-left: 20rpx;
+}
+
+.small-star {
+  width: 30rpx;
+  height: 30rpx;
+  margin-right: 6rpx;
+  display: block;
+}
+
+.stars-number {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #FFA500;
+  line-height: 1;
+  text-align: center;
+  min-width: 30rpx;
+}
+
+/* 任务底部 */
+.task-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 10rpx;
+}
+
+.task-count {
+  font-size: 26rpx;
+  color: #999;
+  background-color: #f8f9fa;
+  padding: 8rpx 24rpx;
+  border-radius: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52rpx;
+}
+
+/* 操作按钮组 - 修复居中 */
+.task-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rpx 24rpx;
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  margin: 0;
+  line-height: 1.5;
+  border: none;
+  height: 56rpx;
+  min-width: 100rpx;
+}
+
+.action-btn::after {
+  border: none;
+}
+
+.edit-btn {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.delete-btn {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.action-icon {
+  width: 28rpx;
+  height: 28rpx;
+  margin-right: 8rpx;
+  display: block;
+}
+
+/* 空状态 */
+.empty-state {
+  padding: 80rpx 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.empty-icon {
+  width: 160rpx;
+  height: 160rpx;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 弹窗样式 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 30rpx;
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 32rpx;
+  width: 100%;
+  max-width: 700rpx;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 40rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 10;
+}
+
+.modal-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 40rpx;
+  color: #999;
+  padding: 10rpx;
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.modal-close:active {
+  background-color: #f5f5f5;
+}
+
+/* 表单样式 */
+.modal-form {
+  padding: 40rpx;
+}
+
+.form-item {
+  margin-bottom: 40rpx;
+}
+
+.form-label-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.form-label {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-required {
+  color: #ff4444;
+  margin-left: 8rpx;
+  font-size: 28rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  padding: 0 30rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  color: #333;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  border-color: #FFD700;
+}
+
+.input-placeholder {
+  color: #bbb;
+  font-size: 28rpx;
+}
+
+/* 星星输入 */
+.stars-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.input-with-icon {
+  position: relative;
+  width: 100%;
+}
+
+.stars-input {
+  padding-right: 80rpx;
+}
+
+.input-star-icon {
+  position: absolute;
+  right: 30rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.stars-quick-select {
+  display: flex;
+  gap: 20rpx;
+}
+
+.star-option {
+  flex: 1;
+  height: 70rpx;
+  line-height: 70rpx;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.star-option.active {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #333;
+  font-weight: bold;
+}
+
+/* 弹窗底部 */
+.modal-footer {
+  display: flex;
+  gap: 20rpx;
+  padding: 30rpx 40rpx;
+  border-top: 2rpx solid #f0f0f0;
+  background-color: #fff;
+}
+
+.modal-btn {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 44rpx;
+  font-size: 32rpx;
+  margin: 0;
+  border: none;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-btn::after {
+  border: none;
+}
+
+.modal-btn.cancel {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.modal-btn.confirm {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #333;
+}
+
+.modal-btn.confirm-delete {
+  background-color: #d32f2f;
+  color: #fff;
+}
+
+/* 删除弹窗 */
+.delete-modal {
+  text-align: center;
+  padding: 40rpx;
+}
+
+.delete-icon {
+  font-size: 100rpx;
+  margin: 20rpx auto;
+  text-align: center;
+}
+
+.delete-desc {
+  font-size: 32rpx;
+  color: #333;
+  margin: 20rpx 0 10rpx;
+  font-weight: 500;
+  text-align: center;
+}
+
+.delete-warning {
+  font-size: 26rpx;
+  color: #ff4444;
+  margin-bottom: 40rpx;
+  text-align: center;
+}

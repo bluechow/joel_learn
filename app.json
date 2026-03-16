@@ -1,75 +1,37 @@
 {
-  "pages": ["pages/home/index", "pages/message/index", "pages/my/index"],
-  "usingComponents": {
-    "t-toast": "tdesign-miniprogram/toast/toast"
-  },
-  "subpackages": [
-    {
-      "root": "pages/search",
-      "name": "search",
-      "pages": ["index"]
-    },
-    {
-      "root": "pages/my/info-edit",
-      "name": "edit",
-      "pages": ["index"]
-    },
-    {
-      "root": "pages/chat",
-      "name": "chat",
-      "pages": ["index"]
-    },
-    {
-      "root": "pages/login",
-      "name": "login",
-      "pages": ["login"]
-    },
-    {
-      "root": "pages/loginCode",
-      "name": "loginCode",
-      "pages": ["loginCode"]
-    },
-    {
-      "root": "pages/dataCenter",
-      "name": "dataCenter",
-      "pages": ["index"]
-    },
-    {
-      "root": "pages/setting",
-      "name": "setting",
-      "pages": ["index"]
-    },
-    {
-      "root": "pages/release",
-      "name": "release",
-      "pages": ["index"]
-    }
+  "pages": [
+    "pages/index/index",
+    "pages/tasks/index",
+    "pages/rewards/index",
+    "pages/profile/index"
   ],
   "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Weixin",
+    "navigationBarBackgroundColor": "#FFD700",
+    "navigationBarTitleText": "星星任务",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
-    "custom": true,
+    "color": "#999",
+    "selectedColor": "#FFD700",
     "list": [
       {
-        "pagePath": "pages/home/index",
-        "text": "首页"
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home_active.png"
       },
       {
-        "pagePath": "pages/message/index",
-        "text": "消息"
+        "pagePath": "pages/tasks/index",
+        "text": "任务",
+        "iconPath": "images/task.png",
+        "selectedIconPath": "images/task_active.png"
       },
       {
-        "pagePath": "pages/my/index",
-        "text": "我的"
+        "pagePath": "pages/rewards/index",
+        "text": "奖励",
+        "iconPath": "images/reward.png",
+        "selectedIconPath": "images/reward_active.png"
       }
     ]
-  },
-  "resolveAlias": {
-    "~/*": "/*"
-  },
-  "sitemapLocation": "sitemap.json"
+  }
 }

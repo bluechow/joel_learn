@@ -1,0 +1,252 @@
+<view class="container">
+  <!-- 星星余额显示（带编辑功能） -->
+  <view class="stars-balance">
+    <image src="/images/star.png" class="star-icon" mode="aspectFit"></image>
+    <view class="balance-wrapper">
+      <text class="balance-number">{{totalStars}}</text>
+      <view class="balance-actions">
+        <button class="star-adjust-btn" bindtap="adjustStars" data-type="minus" data-amount="1">-1</button>
+        <button class="star-adjust-btn" bindtap="adjustStars" data-type="minus" data-amount="5">-5</button>
+        <button class="star-adjust-btn edit-btn" bindtap="showStarsEdit">✎</button>
+        <button class="star-adjust-btn" bindtap="adjustStars" data-type="plus" data-amount="1">+1</button>
+        <button class="star-adjust-btn" bindtap="adjustStars" data-type="plus" data-amount="5">+5</button>
+      </view>
+    </view>
+    <text class="balance-label">颗星星</text>
+  </view>
+
+  <!-- 奖励管理工具栏 -->
+  <view class="rewards-toolbar">
+    <button class="add-reward-btn" bindtap="showAddReward">
+      <text class="btn-icon">+</text>
+      <text>添加新奖励</text>
+    </button>
+    <button class="manage-btn" bindtap="toggleManageMode">
+      <text class="btn-icon">{{manageMode ? '✓' : '✎'}}</text>
+      <text>{{manageMode ? '完成' : '管理'}}</text>
+    </button>
+  </view>
+
+  <!-- 可兑换奖励列表 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">🎁 我的奖励</text>
+      <text class="section-count">{{rewards.length}}个奖励</text>
+    </view>
+    
+    <view class="rewards-grid">
+      <view class="reward-card" wx:for="{{rewards}}" wx:key="id" wx:for-item="item">
+        <!-- 管理模式下的操作按钮 -->
+        <view class="manage-actions" wx:if="{{manageMode}}">
+          <button class="manage-action edit-action" bindtap="editReward" data-id="{{item.id}}">✎</button>
+          <button class="manage-action delete-action" bindtap="deleteReward" data-id="{{item.id}}">✕</button>
+        </view>
+        
+        <!-- 奖励内容 -->
+        <view class="reward-content" bindtap="{{manageMode ? '' : 'showRewardDetail'}}" data-id="{{item.id}}">
+          <image src="{{item.icon || '/images/gift.png'}}" class="reward-icon" mode="aspectFit"></image>
+          <text class="reward-name">{{item.name}}</text>
+          <text class="reward-desc">{{item.description || item.desc || '暂无描述'}}</text>
+          
+          <!-- 修复：显示星星数量 -->
+          <view class="reward-cost">
+            <image src="/images/star.png" class="mini-star" mode="aspectFit"></image>
+            <text class="cost-number">{{item.cost}}</text>
+          </view>
+        </view>
+        
+        <!-- 兑换按钮容器 -->
+        <view class="exchange-btn-wrapper" wx:if="{{!manageMode}}">
+          <button 
+            class="exchange-btn {{totalStars < item.cost ? 'disabled' : ''}}" 
+            bindtap="exchangeReward" 
+            data-id="{{item.id}}"
+            disabled="{{totalStars < item.cost}}"
+          >
+            {{totalStars < item.cost ? '星星不足' : '兑换'}}
+          </button>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 空状态提示 -->
+    <view class="empty-state" wx:if="{{rewards.length === 0}}">
+      <image src="/images/gift.png" class="empty-icon" mode="aspectFit"></image>
+      <text class="empty-text">还没有奖励，点击"添加新奖励"创建吧~</text>
+    </view>
+  </view>
+
+  <!-- 兑换记录 -->
+  <view class="section" wx:if="{{history.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">📋 最近兑换</text>
+      <text class="section-count">{{history.length}}条记录</text>
+    </view>
+    
+    <view class="history-list">
+      <view class="history-item" wx:for="{{history}}" wx:key="index">
+        <view class="history-info">
+          <text class="history-name">{{item.rewardName}}</text>
+          <text class="history-time">{{item.date}}</text>
+        </view>
+        <view class="history-cost">
+          <image src="/images/star.png" class="mini-star" mode="aspectFit"></image>
+          <text class="cost-number">{{item.cost}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 星星编辑弹窗 -->
+  <view class="modal" wx:if="{{showStarsModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">调整星星数量</text>
+        <text class="modal-close" bindtap="hideStarsEdit">✕</text>
+      </view>
+      
+      <view class="stars-edit-panel">
+        <view class="current-stars-display">
+          <image src="/images/star.png" class="big-star" mode="aspectFit"></image>
+          <text class="current-stars-number">{{totalStars}}</text>
+        </view>
+        
+        <view class="quick-adjust">
+          <text class="adjust-label">快速调整：</text>
+          <view class="quick-btns">
+            <button class="quick-btn" bindtap="adjustStars" data-type="minus" data-amount="10">-10</button>
+            <button class="quick-btn" bindtap="adjustStars" data-type="minus" data-amount="5">-5</button>
+            <button class="quick-btn" bindtap="adjustStars" data-type="minus" data-amount="1">-1</button>
+            <button class="quick-btn" bindtap="adjustStars" data-type="plus" data-amount="1">+1</button>
+            <button class="quick-btn" bindtap="adjustStars" data-type="plus" data-amount="5">+5</button>
+            <button class="quick-btn" bindtap="adjustStars" data-type="plus" data-amount="10">+10</button>
+          </view>
+        </view>
+        
+        <view class="manual-adjust">
+          <text class="adjust-label">手动输入：</text>
+          <view class="manual-input-group">
+            <input 
+              class="manual-input" 
+              type="number" 
+              placeholder="输入数量" 
+              placeholder-class="input-placeholder"
+              bindinput="onStarsInput"
+              value="{{editStarsValue}}"
+            />
+            <view class="manual-btns">
+              <button class="manual-btn add" bindtap="manualAdjust" data-type="plus">增加</button>
+              <button class="manual-btn subtract" bindtap="manualAdjust" data-type="minus">减少</button>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="hideStarsEdit">取消</button>
+        <button class="modal-btn confirm" bindtap="hideStarsEdit">确定</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 添加/编辑奖励弹窗 -->
+  <view class="modal" wx:if="{{showRewardModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">{{rewardModalTitle}}</text>
+        <text class="modal-close" bindtap="hideRewardModal">✕</text>
+      </view>
+      
+      <view class="reward-form">
+        <view class="form-item">
+          <text class="form-label">奖励名称 <text class="required">*</text></text>
+          <input 
+            class="form-input" 
+            placeholder="例如：冰淇淋、看电影" 
+            placeholder-class="input-placeholder"
+            bindinput="onRewardNameInput" 
+            value="{{editReward.name}}"
+            maxlength="20"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">奖励描述</text>
+          <input 
+            class="form-input" 
+            placeholder="简单描述这个奖励" 
+            placeholder-class="input-placeholder"
+            bindinput="onRewardDescInput" 
+            value="{{editReward.desc}}"
+            maxlength="30"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">所需星星 <text class="required">*</text></text>
+          <view class="cost-input-wrapper">
+            <input 
+              class="form-input cost-input" 
+              type="number" 
+              placeholder="1-999" 
+              placeholder-class="input-placeholder"
+              bindinput="onRewardCostInput" 
+              value="{{editReward.cost}}"
+              maxlength="3"
+            />
+            <image src="/images/star.png" class="cost-star-icon" mode="aspectFit"></image>
+          </view>
+          <view class="cost-quick-select">
+            <text class="cost-option {{editReward.cost == 5 ? 'active' : ''}}" bindtap="quickSelectCost" data-cost="5">5</text>
+            <text class="cost-option {{editReward.cost == 10 ? 'active' : ''}}" bindtap="quickSelectCost" data-cost="10">10</text>
+            <text class="cost-option {{editReward.cost == 20 ? 'active' : ''}}" bindtap="quickSelectCost" data-cost="20">20</text>
+            <text class="cost-option {{editReward.cost == 30 ? 'active' : ''}}" bindtap="quickSelectCost" data-cost="30">30</text>
+            <text class="cost-option {{editReward.cost == 50 ? 'active' : ''}}" bindtap="quickSelectCost" data-cost="50">50</text>
+          </view>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">图标选择</text>
+          <view class="icon-selector">
+            <view class="icon-option {{editReward.icon === '/images/gift.png' ? 'active' : ''}}" bindtap="selectIcon" data-icon="/images/gift.png">
+              <image src="/images/gift.png" class="icon-preview" mode="aspectFit"></image>
+              <text>礼物</text>
+            </view>
+            <view class="icon-option {{editReward.icon === '/images/icecream.png' ? 'active' : ''}}" bindtap="selectIcon" data-icon="/images/icecream.png">
+              <image src="/images/icecream.png" class="icon-preview" mode="aspectFit"></image>
+              <text>冰淇淋</text>
+            </view>
+            <view class="icon-option {{editReward.icon === '/images/movie.png' ? 'active' : ''}}" bindtap="selectIcon" data-icon="/images/movie.png">
+              <image src="/images/movie.png" class="icon-preview" mode="aspectFit"></image>
+              <text>电影</text>
+            </view>
+            <view class="icon-option {{editReward.icon === '/images/dinner.png' ? 'active' : ''}}" bindtap="selectIcon" data-icon="/images/dinner.png">
+              <image src="/images/dinner.png" class="icon-preview" mode="aspectFit"></image>
+              <text>大餐</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="hideRewardModal">取消</button>
+        <button class="modal-btn confirm" bindtap="saveReward">保存奖励</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 删除确认弹窗 -->
+  <view class="modal" wx:if="{{showDeleteModal}}">
+    <view class="modal-content delete-modal">
+      <view class="delete-icon">⚠️</view>
+      <text class="modal-title">确认删除</text>
+      <text class="delete-desc">确定要删除奖励"{{deleteRewardName}}"吗？</text>
+      <text class="delete-warning">此操作不可恢复</text>
+      
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="hideDeleteModal">取消</button>
+        <button class="modal-btn confirm-delete" bindtap="confirmDelete">确定删除</button>
+      </view>
+    </view>
+  </view>
+</view>

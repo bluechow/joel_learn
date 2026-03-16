@@ -1,0 +1,136 @@
+<view class="container">
+  <!-- 星星总数显示 -->
+  <view class="stars-total">
+    <image src="/images/star.png" class="star-icon" mode="aspectFit"></image>
+    <view class="stars-edit-wrapper">
+      <text class="total-number">{{totalStars}}</text>
+      <view class="stars-actions">
+        <button class="star-btn minus" bindtap="adjustStars" data-type="minus" data-amount="1">-1</button>
+        <button class="star-btn minus" bindtap="adjustStars" data-type="minus" data-amount="5">-5</button>
+        <button class="star-btn edit" bindtap="showStarsEdit">✎</button>
+        <button class="star-btn plus" bindtap="adjustStars" data-type="plus" data-amount="1">+1</button>
+        <button class="star-btn plus" bindtap="adjustStars" data-type="plus" data-amount="5">+5</button>
+      </view>
+    </view>
+    <text class="total-label">颗星星</text>
+  </view>
+
+  <!-- 今日任务 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">今日任务</text>
+      <text class="section-more" bindtap="goToTasks">查看更多 ></text>
+    </view>
+    
+    <view class="task-list">
+      <view class="task-item" wx:for="{{todayTasks}}" wx:key="id">
+        <view class="task-info">
+          <text class="task-name">{{item.name}}</text>
+          <text class="task-desc">{{item.desc || '暂无描述'}}</text>
+        </view>
+        <view class="task-right">
+          <view class="task-stars">
+            <image src="/images/star.png" class="small-star" mode="aspectFit"></image>
+            <text>{{item.stars}}</text>
+          </view>
+          <button 
+            class="complete-btn {{item.completed ? 'completed' : ''}}" 
+            disabled="{{item.completed}}"
+            bindtap="completeTask" 
+            data-id="{{item.id}}"
+          >
+            {{item.completed ? '已完成' : '完成'}}
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 可用奖励 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">可用奖励</text>
+      <text class="section-more" bindtap="goToRewards">查看更多 ></text>
+    </view>
+    
+    <view class="rewards-grid">
+      <view class="reward-card" wx:for="{{rewards}}" wx:key="id" wx:for-item="item">
+        <image src="{{item.icon || '/images/gift.png'}}" class="reward-icon" mode="aspectFit"></image>
+        <text class="reward-name">{{item.name}}</text>
+        
+        <!-- 修复：星星数量容器 -->
+        <view class="reward-cost">
+          <image src="/images/star.png" class="mini-star" mode="aspectFit"></image>
+          <text class="cost-number">{{item.cost}}</text>
+        </view>
+        
+        <button class="exchange-btn" bindtap="exchangeReward" data-id="{{item.id}}">兑换</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 星星数量编辑弹窗 -->
+  <view class="modal" wx:if="{{showStarsModal}}">
+    <view class="modal-content stars-modal">
+      <view class="modal-header">
+        <text class="modal-title">调整星星数量</text>
+        <text class="modal-close" bindtap="hideStarsEdit">✕</text>
+      </view>
+      
+      <view class="stars-display">
+        <image src="/images/star.png" class="modal-star-icon" mode="aspectFit"></image>
+        <text class="current-stars">{{totalStars}}</text>
+      </view>
+      
+      <view class="stars-adjust-panel">
+        <view class="quick-adjust">
+          <text class="adjust-label">快速调整：</text>
+          <view class="quick-btns">
+            <button class="quick-btn" bindtap="adjustStars" data-type="minus" data-amount="10">-10</button>
+            <button class="quick-btn" bindtap="adjustStars" data-type="minus" data-amount="5">-5</button>
+            <button class="quick-btn" bindtap="adjustStars" data-type="minus" data-amount="1">-1</button>
+            <button class="quick-btn" bindtap="adjustStars" data-type="plus" data-amount="1">+1</button>
+            <button class="quick-btn" bindtap="adjustStars" data-type="plus" data-amount="5">+5</button>
+            <button class="quick-btn" bindtap="adjustStars" data-type="plus" data-amount="10">+10</button>
+          </view>
+        </view>
+        
+        <view class="manual-adjust">
+          <text class="adjust-label">手动输入：</text>
+          <view class="manual-input-wrapper">
+            <input 
+              class="manual-input" 
+              type="number" 
+              placeholder="输入数量" 
+              placeholder-class="input-placeholder"
+              bindinput="onStarsInput"
+              value="{{editStarsValue}}"
+            />
+            <view class="manual-btns">
+              <button class="manual-btn add" bindtap="manualAdjust" data-type="plus">增加</button>
+              <button class="manual-btn subtract" bindtap="manualAdjust" data-type="minus">减少</button>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <view class="adjust-history" wx:if="{{adjustHistory.length > 0}}">
+        <text class="history-label">最近调整：</text>
+        <view class="history-list">
+          <view class="history-item" wx:for="{{adjustHistory}}" wx:key="index">
+            <text class="history-time">{{item.time}}</text>
+            <text class="history-change {{item.amount > 0 ? 'plus' : 'minus'}}">
+              {{item.amount > 0 ? '+' : ''}}{{item.amount}}
+            </text>
+            <text class="history-reason">{{item.reason}}</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="hideStarsEdit">取消</button>
+        <button class="modal-btn confirm" bindtap="saveStarsAdjust">确认调整</button>
+      </view>
+    </view>
+  </view>
+</view>

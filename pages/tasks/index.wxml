@@ -1,0 +1,136 @@
+<view class="container">
+  <!-- 添加任务按钮 -->
+  <view class="add-btn-wrapper">
+    <button class="add-btn" bindtap="showAddTask">+ 添加新任务</button>
+  </view>
+  
+  <!-- 任务列表 -->
+  <view class="task-section">
+    <view class="task-list">
+      <view class="task-item" wx:for="{{tasks}}" wx:key="id" wx:for-item="item">
+        <view class="task-content">
+          <!-- 任务头部：名称和星星 -->
+          <view class="task-header">
+            <view class="task-title">
+              <text class="task-name">{{item.name}}</text>
+              <text class="task-desc">{{item.desc || '暂无描述'}}</text>
+            </view>
+            <view class="task-stars">
+              <image src="/images/star.png" class="small-star" mode="aspectFit"></image>
+              <text class="stars-number">{{item.stars}}</text>
+            </view>
+          </view>
+          
+          <!-- 任务底部：完成次数和操作按钮 -->
+          <view class="task-footer">
+            <text class="task-count">已完成 {{item.completedDates ? item.completedDates.length : 0}} 次</text>
+            
+            <!-- 操作按钮组 -->
+            <view class="task-actions">
+              <button class="action-btn edit-btn" bindtap="editTask" data-id="{{item.id}}">
+                <image src="/images/edit.png" class="action-icon" mode="aspectFit"></image>
+                <text>编辑</text>
+              </button>
+              <button class="action-btn delete-btn" bindtap="deleteTask" data-id="{{item.id}}">
+                <image src="/images/delete.png" class="action-icon" mode="aspectFit"></image>
+                <text>删除</text>
+              </button>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 空状态提示 -->
+    <view class="empty-state" wx:if="{{tasks.length === 0}}">
+      <image src="/images/task.png" class="empty-icon" mode="aspectFit"></image>
+      <text class="empty-text">还没有任务，点击上方按钮添加吧~</text>
+    </view>
+  </view>
+
+  <!-- 添加/编辑任务弹窗 -->
+  <view class="modal" wx:if="{{showModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">{{modalTitle}}</text>
+        <text class="modal-close" bindtap="hideModal">✕</text>
+      </view>
+      
+      <view class="modal-form">
+        <view class="form-item">
+          <view class="form-label-wrapper">
+            <text class="form-label">任务名称</text>
+            <text class="form-required">*</text>
+          </view>
+          <input 
+            class="form-input" 
+            placeholder="例如：早起、阅读、运动" 
+            placeholder-class="input-placeholder"
+            bindinput="onTaskNameInput" 
+            value="{{editTask.name}}"
+            maxlength="20"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">任务描述</text>
+          <input 
+            class="form-input" 
+            placeholder="例如：7点前起床、阅读30分钟" 
+            placeholder-class="input-placeholder"
+            bindinput="onTaskDescInput" 
+            value="{{editTask.desc}}"
+            maxlength="30"
+          />
+        </view>
+        
+        <view class="form-item">
+          <view class="form-label-wrapper">
+            <text class="form-label">奖励星星</text>
+            <text class="form-required">*</text>
+          </view>
+          <view class="stars-input-wrapper">
+            <view class="input-with-icon">
+              <input 
+                class="form-input stars-input" 
+                placeholder="1-99" 
+                placeholder-class="input-placeholder"
+                type="number" 
+                bindinput="onTaskStarsInput" 
+                value="{{editTask.stars}}"
+                maxlength="2"
+              />
+              <image src="/images/star.png" class="input-star-icon" mode="aspectFit"></image>
+            </view>
+            <view class="stars-quick-select">
+              <text class="star-option {{editTask.stars == 1 ? 'active' : ''}}" bindtap="quickSelectStar" data-stars="1">1</text>
+              <text class="star-option {{editTask.stars == 2 ? 'active' : ''}}" bindtap="quickSelectStar" data-stars="2">2</text>
+              <text class="star-option {{editTask.stars == 3 ? 'active' : ''}}" bindtap="quickSelectStar" data-stars="3">3</text>
+              <text class="star-option {{editTask.stars == 5 ? 'active' : ''}}" bindtap="quickSelectStar" data-stars="5">5</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="hideModal">取消</button>
+        <button class="modal-btn confirm" bindtap="saveTask">保存任务</button>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 删除确认弹窗 -->
+  <view class="modal" wx:if="{{showDeleteModal}}">
+    <view class="modal-content delete-modal">
+      <view class="delete-icon">⚠️</view>
+      <text class="modal-title">确认删除</text>
+      <text class="delete-desc">确定要删除"{{deleteTaskName}}"吗？</text>
+      <text class="delete-warning">此操作不可恢复</text>
+      
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="hideDeleteModal">再想想</button>
+        <button class="modal-btn confirm-delete" bindtap="confirmDelete">确定删除</button>
+      </view>
+    </view>
+  </view>
+</view>
